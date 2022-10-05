@@ -14,7 +14,7 @@ CMD ["npm", "run", "start:dev"]
 
 FROM node:16.13-alpine AS production
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY package*.json ./
 

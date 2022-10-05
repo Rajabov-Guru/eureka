@@ -18,7 +18,7 @@ services:
       - .:/app
       - /app/node_modules
     restart: unless-stopped
-  postgres-prod:
+  postgres:
     container_name: postgres
     image: postgres:12
     env_file:
@@ -26,7 +26,7 @@ services:
     environment:
       PG_DATA: /var/lib/postgresql/data
     ports:
-      - 5432:5432
+      - '5432:5432'
     volumes:
       - pgdata:/var/lib/postgresql/data
     restart: always
@@ -49,10 +49,10 @@ services:
       - .:/app
       - /app/node_modules
     depends_on:
-      - postgres-prod
+      - postgres
     restart: unless-stopped
 
-networks:
-  nesjs-network:
 volumes:
   pgdata:
+networks:
+  nesjs-network:
