@@ -12,8 +12,6 @@ services:
     ports:
       - '3000:3000'
       - '9229:9229'
-    networks:
-      - nesjs-network
     volumes:
       - .:/app
       - /app/node_modules
@@ -41,8 +39,6 @@ services:
     ports:
       - '5000:5000'
       - '9229:9229'
-    networks:
-      - nesjs-network
     env_file:
       - .production.env
     volumes:
@@ -54,5 +50,3 @@ services:
 
 volumes:
   pgdata:
-networks:
-  nesjs-network:
