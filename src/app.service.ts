@@ -19,6 +19,6 @@ export class AppService {
   }
 
   getMessage():string{
-    return 'Message 2';
+    return 'Another Message';
   }
 }
