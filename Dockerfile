@@ -4,13 +4,13 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install glob rimraf
-
-RUN npm install --only=development
+RUN npm install
 
 COPY . .
 
-RUN npm run build
+COPY ./dist ./dist
+
+CMD ["npm", "run", "start:dev"]
 
 FROM node:16.13-alpine as production
 
