@@ -17,6 +17,9 @@ import {SequelizeModule} from "@nestjs/sequelize";
       database: process.env.MYSQL_DATABASE,
       models: [],
       autoLoadModels:true,
+      dialectOptions: {
+        socketPath: "/var/run/mysqld/mysqld.sock"
+      }
     }),
   ],
   controllers: [AppController],
