@@ -12,6 +12,8 @@ services:
     ports:
       - '3000:3000'
       - '9229:9229'
+    networks:
+      - nesjs-network
     volumes:
       - .:/app
       - /app/node_modules
@@ -21,6 +23,8 @@ services:
     image: postgres:12
     env_file:
       - .production.env
+    networks:
+      - nesjs-network
     environment:
       PG_DATA: /var/lib/postgresql/data
     ports:
@@ -39,6 +43,8 @@ services:
     ports:
       - '5000:5000'
       - '9229:9229'
+    networks:
+      - nesjs-network
     env_file:
       - .production.env
     volumes:
@@ -50,3 +56,5 @@ services:
 
 volumes:
   pgdata:
+networks:
+  nesjs-network:
