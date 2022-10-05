@@ -19,6 +19,6 @@ export class AppService {
   }
 
   getMessage():string{
-    return process.env.MYSQL_DATABASE;
+    return 'Message';
   }
 }

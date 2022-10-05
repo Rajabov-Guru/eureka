@@ -1,0 +1,47 @@
+name: vds-remote-connection-test
+
+on:
+  push:
+    branches: [ "master" ]
+
+  workflow_dispatch:
+
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+
+        with:
+          key: ${{ secrets.SSH_KEY }}
+          known_hosts: ${{ secrets.KNOWN_HOST }}
+
+
+      - name: Adding Known Hosts
+        run: ssh-keyscan -p ${{ secrets.PORT}} -H ${{ secrets.KNOWN_HOST }}  >> ~/.ssh/known_hosts
+
+      #- name: Deploy with rsync
+      #  run: rsync -avz ./ ${{ secrets.USERNAME }}@${{ secrets.KNOWN_HOST }}:~/home
+
+      - name: Restart Node Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.KNOWN_HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd ~/
+            cd eureka
+            docker compose down --rmi all
+            cd ..
+            rm -rf eureka
+            git clone https://github.com/Rajabov-Guru/eureka.git
+            cd eureka
+            docker compose up prod -d
