@@ -17,10 +17,30 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
+    depends_on:
+      - dev-db
     restart: unless-stopped
+  dev-db:
+    image: mysql:5.7
+    container_name: mysql
+    volumes:
+      - ./database/data:/var/lib/mysql
+    ports:
+      - '3308:3308'
+    env_file:
+      - .development.env
+  prod-db:
+    image: mysql:5.7
+    container_name: mysql
+    volumes:
+      - ./database/data:/var/lib/mysql
+    ports:
+      - '3308:3308'
+    env_file:
+      - .production.env
   prod:
-    container_name: nestjs_api_dev
-    image: nestjs-api-dev:1.0.0
+    container_name: nestjs_api_prod
+    image: nestjs-api-prod:1.0.0
     build:
       context: .
       target: production
@@ -36,8 +56,8 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
-#    depends_on:
-#      - mysqldb
+    depends_on:
+      - prod-db
     restart: unless-stopped
 
 networks:

@@ -11,8 +11,8 @@ export interface IMovie {
 export class AppService {
   private movies: IMovie[] = [
     { id: 1, name: 'Fuck Wars: The Force Awakens', year: 2015 },
-    { id: 2, name: 'Star Wars: The Last Jedi', year: 2017 },
-    { id: 3, name: 'Star Wars: The Rise of Skywalker', year: 2019 },
+    { id: 2, name: 'Star Wars: The Last Jedi2', year: 2017 },
+    { id: 3, name: 'Star Wars: The Rise of Skywalker2', year: 2019 },
   ];
   getMovies(): IMovie[] {
     return this.movies;
