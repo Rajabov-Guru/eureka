@@ -40,7 +40,7 @@ jobs:
             cd ~/
             cd eureka
             docker compose down --rmi all
-            cd ..
+            cd ~
             rm -rf eureka
             git clone https://github.com/Rajabov-Guru/eureka.git
             cd eureka
