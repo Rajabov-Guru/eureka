@@ -1,4 +1,4 @@
-import { BelongsTo, Column, DataType, Model, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript';
 import { Board } from '../../boards/entities/board.entity';
 
 interface IdeaCreationAttrs{
@@ -17,6 +17,10 @@ export class Idea extends Model<Idea,IdeaCreationAttrs>{
 
   @Column({type:DataType.TEXT, allowNull:false})
   text:string;
+
+  @ForeignKey(()=>Board)
+  @Column({type:DataType.INTEGER, allowNull:false})
+  boardId:number;
 
   @BelongsTo(()=>Board)
   board:Board;
