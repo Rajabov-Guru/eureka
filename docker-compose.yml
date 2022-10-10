@@ -1,6 +1,20 @@
 version: '3.8'
 
 services:
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    networks:
+      -   nesjs-network
+    restart: unless-stopped
   dev-db:
     container_name: postgres
     image: postgres:12
@@ -33,6 +47,7 @@ services:
       - /app/node_modules
     depends_on:
       - dev-db
+      - pgadmin
     restart: unless-stopped
   postgres:
     container_name: postgres
@@ -68,9 +83,11 @@ services:
       - /app/node_modules
     depends_on:
       - postgres
+      - pgadmin
     restart: unless-stopped
 
 volumes:
   pgdata:
+  pgadmin:
 networks:
   nesjs-network:
