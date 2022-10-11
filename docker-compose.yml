@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+
   pgadmin:
     container_name: pgadmin_container
     image: dpage/pgadmin4
@@ -13,8 +14,9 @@ services:
     ports:
       - "${PGADMIN_PORT:-5050}:80"
     networks:
-      -   nesjs-network
+      - nesjs-network
     restart: unless-stopped
+
   dev-db:
     container_name: postgres
     image: postgres:12
@@ -29,6 +31,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     restart: unless-stopped
+
   dev:
     container_name: nestjs_api_dev
     image: nestjs-api-dev:1.0.0
@@ -49,6 +52,7 @@ services:
       - dev-db
       - pgadmin
     restart: unless-stopped
+
   postgres:
     container_name: postgres
     image: postgres:12
@@ -62,7 +66,8 @@ services:
       - '5432:5432'
     volumes:
       - pgdata:/var/lib/postgresql/data
-    restart: always
+    restart: unless-stopped
+
   prod:
     container_name: nestjs_api_prod
     image: nestjs-api-prod:1.0.0
@@ -89,5 +94,6 @@ services:
 volumes:
   pgdata:
   pgadmin:
+
 networks:
   nesjs-network:
