@@ -1,26 +1,38 @@
 import { Injectable } from '@nestjs/common';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
+import { InjectModel } from '@nestjs/sequelize';
+import { Board } from './entities/board.entity';
 
 @Injectable()
 export class BoardsService {
-  create(createBoardDto: CreateBoardDto) {
-    return 'This action adds a new board';
+  constructor(@InjectModel(Board) private boardRepository: typeof Board) {
   }
 
-  findAll() {
-    return `This action returns all boards`;
+  async create(createBoardDto: CreateBoardDto) {
+    const board = await this.boardRepository.create(createBoardDto);
+    return board;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} board`;
+  async findAll() {
+    const boards =  await this.boardRepository.findAll();
+    return boards;
   }
 
-  update(id: number, updateBoardDto: UpdateBoardDto) {
-    return `This action updates a #${id} board`;
+  async findOne(id: number) {
+    const board  = await this.boardRepository.findByPk(id);
+    return board;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} board`;
+  async update(id: number, updateBoardDto: UpdateBoardDto) {
+    const board = await this.boardRepository.findByPk(id);
+    await board.update(updateBoardDto);
+    await board.save();
+    return board;
+  }
+
+  async remove(id: number) {
+    const board =  await this.boardRepository.destroy({where:{id}})
+    return board;
   }
 }

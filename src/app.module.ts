@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
 import {ConfigModule} from "@nestjs/config";
 import {SequelizeModule} from "@nestjs/sequelize";
-import { UsersModule } from './users/users.module';
 import { IdeasModule } from './ideas/ideas.module';
 import { BoardsModule } from './boards/boards.module';
 import { Board } from './boards/entities/board.entity';
 import { Idea } from './ideas/entities/idea.entity';
+import { UsersModule } from './users/users.module';
 import { User } from './users/entities/user.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { User } from './users/entities/user.entity';
     UsersModule,
     IdeasModule,
     BoardsModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],

@@ -1,26 +1,39 @@
 import { Injectable } from '@nestjs/common';
 import { CreateIdeaDto } from './dto/create-idea.dto';
 import { UpdateIdeaDto } from './dto/update-idea.dto';
+import { InjectModel } from '@nestjs/sequelize';
+import { Idea } from './entities/idea.entity';
 
 @Injectable()
 export class IdeasService {
-  create(createIdeaDto: CreateIdeaDto) {
-    return 'This action adds a new idea';
+
+  constructor(@InjectModel(Idea) private ideaRepository: typeof Idea) {
   }
 
-  findAll() {
-    return `This action returns all ideas`;
+  async create(createIdeaDto: CreateIdeaDto) {
+    const idea = await this.ideaRepository.create(createIdeaDto);
+    return idea;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} idea`;
+  async findAll() {
+    const ideas = await this.ideaRepository.findAll();
+    return ideas;
   }
 
-  update(id: number, updateIdeaDto: UpdateIdeaDto) {
-    return `This action updates a #${id} idea`;
+  async findOne(id: number) {
+    const idea = await this.ideaRepository.findByPk(id);
+    return idea;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} idea`;
+  async update(id: number, updateIdeaDto: UpdateIdeaDto) {
+    const idea = await this.ideaRepository.findByPk(id);
+    await idea.update(updateIdeaDto);
+    await idea.save();
+    return idea;
+  }
+
+  async remove(id: number) {
+    const idea = await this.ideaRepository.destroy({where:{id}});
+    return idea;
   }
 }
