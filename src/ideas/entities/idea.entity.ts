@@ -3,7 +3,9 @@ import { Board } from '../../boards/entities/board.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
 interface IdeaCreationAttrs{
+  title:string;
   text:string;
+  boardId:number;
 }
 
 
@@ -17,8 +19,12 @@ export class Idea extends Model<Idea,IdeaCreationAttrs>{
   @Column({type:DataType.INTEGER, unique:true, autoIncrement:true, primaryKey:true})
   id:number;
 
+  @ApiProperty({example:"Идея №1", description:"Заголовок"})
+  @Column({type:DataType.TEXT, allowNull:false, validate:{notEmpty: true,}})
+  title:string;
+
   @ApiProperty({example:"Какой-то текст", description:"Описание идеи"})
-  @Column({type:DataType.TEXT, allowNull:false})
+  @Column({type:DataType.TEXT, allowNull:false, validate:{notEmpty: true,}})
   text:string;
 
   @ApiProperty({example:"1", description:"ID доски"})

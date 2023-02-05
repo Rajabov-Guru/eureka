@@ -1,12 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Board } from './entities/board.entity';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @ApiTags('Доски')
 @Controller('boards')
+@UseGuards(JwtAuthGuard)
 export class BoardsController {
   constructor(private readonly boardsService: BoardsService) {}
 
@@ -29,6 +31,13 @@ export class BoardsController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.boardsService.findOne(+id);
+  }
+
+  @ApiOperation({summary:"Получение досок по ключу пользователя"})
+  @ApiOkResponse({status:200, type:[Board]})
+  @Get('/user/:id')
+  findByUser(@Param('id') id: string) {
+    return this.boardsService.findByUser(+id);
   }
 
   @ApiOperation({summary:"Редактирование доски"})

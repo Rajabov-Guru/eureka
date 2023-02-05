@@ -5,7 +5,6 @@ import { ApiProperty } from '@nestjs/swagger';
 interface UserCreationAttrs{
   nickname:string;
   password:string;
-  avatar:string;
 }
 
 
@@ -21,16 +20,12 @@ export class User extends Model<User,UserCreationAttrs>{
   id:number;
 
   @ApiProperty({example:'Noobmaster96', description:"Никнейм"})
-  @Column({type:DataType.STRING, unique:true, allowNull:false})
+  @Column({type:DataType.STRING, unique:true, allowNull:false, validate:{notEmpty: true,}})
   nickname:string;
 
   @ApiProperty({example:'qwerty', description:"Пароль"})
-  @Column({type:DataType.STRING, allowNull:false})
+  @Column({type:DataType.STRING, allowNull:false, validate:{notEmpty: true,}})
   password:string;
-
-  @ApiProperty({example:'*URL*', description:"Аватар"})
-  @Column({type:DataType.STRING, allowNull:false})
-  avatar:string;
 
   @HasMany(()=>Board,{ onDelete: 'cascade' })
   boards:Board[];

@@ -8,6 +8,4 @@ export class CreateUserDto {
   @ApiProperty({example:'qwerty', description:"Пароль"})
   readonly password:string;
 
-  @ApiProperty({example:'*URL*', description:"Аватар"})
-  readonly avatar:string;
 }

@@ -8,6 +8,7 @@ import { Idea } from './ideas/entities/idea.entity';
 import { UsersModule } from './users/users.module';
 import { User } from './users/entities/user.entity';
 import { AuthModule } from './auth/auth.module';
+import { Token } from './auth/enitities/token.entity';
 
 @Module({
   imports: [
@@ -21,8 +22,9 @@ import { AuthModule } from './auth/auth.module';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [User,Board,Idea],
-      autoLoadModels:true}),
+      models: [User, Token,Board,Idea],
+      autoLoadModels:true,
+    }),
     UsersModule,
     IdeasModule,
     BoardsModule,

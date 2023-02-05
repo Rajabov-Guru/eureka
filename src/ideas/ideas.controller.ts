@@ -1,12 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { IdeasService } from './ideas.service';
 import { CreateIdeaDto } from './dto/create-idea.dto';
 import { UpdateIdeaDto } from './dto/update-idea.dto';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Idea } from './entities/idea.entity';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @ApiTags('Идеи')
 @Controller('ideas')
+@UseGuards(JwtAuthGuard)
 export class IdeasController {
   constructor(private readonly ideasService: IdeasService) {}
 
@@ -29,6 +31,13 @@ export class IdeasController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.ideasService.findOne(+id);
+  }
+
+  @ApiOperation({summary:"Получение по ключу доски"})
+  @ApiOkResponse({status:200, type:[Idea]})
+  @Get('/board/:id')
+  findByBoard(@Param('id') id: string) {
+    return this.ideasService.findByBoardId(+id);
   }
 
   @ApiOperation({summary:"Редактирование идеи"})

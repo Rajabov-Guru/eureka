@@ -7,42 +7,59 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy:
-
+  debug:
+    name: Debug
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - name: Check out code
+        uses: actions/checkout@v2
 
-      - name: Install SSH Key
-        uses: shimataro/ssh-key-action@v2
-
-        with:
-          key: ${{ secrets.SSH_KEY }}
-          known_hosts: ${{ secrets.KNOWN_HOST }}
-
-
-      - name: Adding Known Hosts
-        run: ssh-keyscan -p ${{ secrets.PORT}} -H ${{ secrets.KNOWN_HOST }}  >> ~/.ssh/known_hosts
-
-      #- name: Deploy with rsync
-      #  run: rsync -avz ./ ${{ secrets.USERNAME }}@${{ secrets.KNOWN_HOST }}:~/home
-
-      - name: Restart Node Server
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.KNOWN_HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.PORT }}
-          script: |
-            cd ~/
-            cd eureka
-            docker compose down --rmi all
-            docker volume prune -f
-            cd ~
-            rm -rf eureka
-            git clone https://github.com/Rajabov-Guru/eureka.git
-            cd eureka
-            docker compose up prod -d
+      - name: Set up secret file
+        env:
+          PORT: ${{ .secrets.PORT }}
+          KNOWN_HOST: ${{secrets.KNOWN_HOST}}
+          USERNAME: ${{secrets.USERNAME}}
+        run: |
+          echo ${{secrets.PORT}} | sed 's/./& /g'
+          echo ${{secrets.KNOWN_HOST}} | sed 's/./& /g'
+          echo ${{secrets.USERNAME}} | sed 's/./& /g'
+#  deploy:
+#
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - uses: actions/checkout@v2
+#      - uses: actions/setup-node@v1
+#
+#      - name: Install SSH Key
+#        uses: shimataro/ssh-key-action@v2
+#
+#        with:
+#          key: ${{ secrets.SSH_KEY }}
+#          known_hosts: ${{ secrets.KNOWN_HOST }}
+#
+#
+#      - name: Adding Known Hosts
+#        run: ssh-keyscan -p ${{ secrets.PORT}} -H ${{ secrets.KNOWN_HOST }}  >> ~/.ssh/known_hosts
+#
+#      #- name: Deploy with rsync
+#      #  run: rsync -avz ./ ${{ secrets.USERNAME }}@${{ secrets.KNOWN_HOST }}:~/home
+#
+#      - name: Restart Node Server
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.KNOWN_HOST }}
+#          username: ${{ secrets.USERNAME }}
+#          key: ${{ secrets.SSH_KEY }}
+#          port: ${{ secrets.PORT }}
+#          script: |
+#            cd ~/
+#            cd eureka
+#            docker compose down --rmi all
+#            docker volume prune -f
+#            cd ~
+#            rm -rf eureka
+#            git clone https://github.com/Rajabov-Guru/eureka.git
+#            cd eureka
+#            docker compose up prod -d

@@ -24,6 +24,11 @@ export class BoardsService {
     return board;
   }
 
+  async findByUser(id: number) {
+    const boards  = await this.boardRepository.findAll({where:{userId:id}});
+    return boards;
+  }
+
   async update(id: number, updateBoardDto: UpdateBoardDto) {
     const board = await this.boardRepository.findByPk(id);
     await board.update(updateBoardDto);

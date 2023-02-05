@@ -25,6 +25,11 @@ export class IdeasService {
     return idea;
   }
 
+  async findByBoardId(id: number) {
+    const ideas = await this.ideaRepository.findAll({where:{boardId:id}});
+    return ideas;
+  }
+
   async update(id: number, updateIdeaDto: UpdateIdeaDto) {
     const idea = await this.ideaRepository.findByPk(id);
     await idea.update(updateIdeaDto);

@@ -5,6 +5,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 interface BoardCreationAttrs{
   name:string;
+  userId:number;
 }
 
 
@@ -18,7 +19,7 @@ export class Board extends Model<Board,BoardCreationAttrs>{
   id:number;
 
   @ApiProperty({example:"Идеи для проектов", description:"Название доски"})
-  @Column({type:DataType.STRING, allowNull:false})
+  @Column({type:DataType.STRING, allowNull:false, validate:{notEmpty: true,}})
   name:string;
 
   @ApiProperty({example:"2", description:"ID пользователя"})
